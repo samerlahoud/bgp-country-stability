@@ -2,8 +2,12 @@
 import json
 import requests
 import sys
+import time
+from datetime import date, timedelta
 
 api_url_base = 'https://stat.ripe.net/data/'
+starttime = date.today()+timedelta(weeks=-2)
+starttime = starttime.strftime("%Y-%m-%dT12:00")
 
 def get_country_asn(country_code):
 
@@ -20,23 +24,35 @@ def get_country_asn(country_code):
 
 def get_asn_update(asn):
 
-    api_url = '{}bgp-update-activity/data.json?resource={}&starttime=2018-02-06T12:00'.format(api_url_base, asn)
+    api_url = '{}bgp-update-activity/data.json?resource={}&starttime={}'.format(api_url_base, asn, starttime)
 
     response = requests.get(api_url)
 
     if response.status_code == 200:
         bgp_activity = json.loads(response.content.decode('utf-8'))
-        nb_announcements = sum(s['announcements'] for s in bgp_activity["data"]["updates"] if s['announcements']!=
- None)
+        nb_announcements = sum(s['announcements'] for s in bgp_activity["data"]["updates"] if s['announcements']!= None)
         nb_withdrawals = sum(s['withdrawals'] for s in bgp_activity["data"]["updates"] if s['withdrawals']!= None)
         nb_updates = nb_announcements+nb_withdrawals
         return [nb_updates, nb_announcements, nb_withdrawals]
     else:
         return None
 
+def get_asn_prefix(asn):
+
+    api_url = '{}announced-prefixes/data.json?resource={}&starttime={}'.format(api_url_base, asn, starttime)
+
+    response = requests.get(api_url)
+
+    if response.status_code == 200:
+        asn_prefix_list = json.loads(response.content.decode('utf-8'))
+        nb_prefixes = len(asn_prefix_list["data"]["prefixes"])
+        return nb_prefixes
+    else:
+        return None
+
 def get_country_update(country_code):
 
-    #country_asn_list = [9051, 39010, 42020]
+    #country_asn_list = [42003, 12812, 9051]
     country_asn_list = get_country_asn(country_code)
     country_update = {}
     for asn in country_asn_list:
@@ -44,7 +60,10 @@ def get_country_update(country_code):
     return country_update
 
 if __name__ == "__main__":
-    
-    print(get_country_update(str(sys.argv[1])))
-    #for asn in country_asn_list:
-    #    print('AS{} is guilty of {}'.format(asn,get_asn_update(asn)[0]))
+
+    country_update = get_country_update(str(sys.argv[1]))
+    for asn in country_update:
+        asn_prefix = get_asn_prefix(asn)
+        asn_update = country_update[asn]
+        #print(asn, asn_update, asn_prefix)
+        print('AS{} generates {} updates per prefix'.format(asn,asn_update/asn_prefix))
