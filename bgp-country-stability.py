@@ -66,4 +66,5 @@ if __name__ == "__main__":
         asn_prefix = get_asn_prefix(asn)
         asn_update = country_update[asn]
         #print(asn, asn_update, asn_prefix)
-        print('AS{} generates {} updates per prefix'.format(asn,asn_update/asn_prefix))
+        if asn_prefix:
+            print('AS{} generates {} updates per prefix for {} prefixes'.format(asn,asn_update/asn_prefix, asn_prefix))
