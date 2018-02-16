@@ -62,7 +62,7 @@ def get_country_update(country_code):
 if __name__ == "__main__":
 
     country_update = get_country_update(str(sys.argv[1]))
-    outfile_path = 'bgp-stability-{}-{}.txt'.format(str(sys.argv[1]),time.time())
+    outfile_path = './output/bgp-stability-{}-{}.txt'.format(str(sys.argv[1]),time.time())
     outfile = open(outfile_path, mode='w', encoding='utf-8')
     for asn in country_update:
         asn_prefix = get_asn_prefix(asn)
