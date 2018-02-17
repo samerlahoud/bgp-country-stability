@@ -2,7 +2,7 @@
 import json
 import requests
 import sys
-import time
+from time import gmtime, strftime
 from datetime import date, timedelta
 
 api_url_base = 'https://stat.ripe.net/data/'
@@ -52,7 +52,6 @@ def get_asn_prefix(asn):
 
 def get_country_update(country_code):
 
-    #country_asn_list = [42003, 12812, 9051]
     country_asn_list = get_country_asn(country_code)
     country_update = {}
     for asn in country_asn_list:
@@ -62,7 +61,7 @@ def get_country_update(country_code):
 if __name__ == "__main__":
 
     country_update = get_country_update(str(sys.argv[1]))
-    outfile_path = './output/bgp-stability-{}-{}.txt'.format(str(sys.argv[1]),time.time())
+    outfile_path = './output/bgp-stability-{}-{}.txt'.format(str(sys.argv[1]),strftime("%Y-%m-%d", gmtime()))
     outfile = open(outfile_path, mode='w', encoding='utf-8')
     for asn in country_update:
         asn_prefix = get_asn_prefix(asn)
