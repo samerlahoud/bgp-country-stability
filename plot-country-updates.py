@@ -9,6 +9,7 @@ from datetime import datetime
 
 merge_nb_updates = []
 merge_update_ratio = []
+merge_nb_prefixes = []
 country_codes = []
 output_path = './output/'
 figure_path = './figures/'
@@ -32,6 +33,7 @@ for output_file in sorted(glob.glob(os.path.join(output_path, '*.txt'))):
         country_codes.append(country_code)
         merge_nb_updates.append(np.log10(nb_updates))
         merge_update_ratio.append(np.log10(update_ratio))
+        merge_nb_prefixes.append(nb_prefixes)
 
         nb_updates_fig = plt.figure()
         plt.loglog(nb_prefixes,nb_updates,'x')
@@ -50,7 +52,7 @@ for output_file in sorted(glob.glob(os.path.join(output_path, '*.txt'))):
 fig, ax = plt.subplots()
 ax.violinplot(merge_nb_updates, showmedians=True)
 ax.grid(True)
-plt.ylabel('Number of updates')
+plt.ylabel('log10(Number of updates)')
 xtickNames = plt.setp(ax, xticklabels=np.repeat(country_codes, 2))
 plt.setp(ax, xticks=[y+1 for y in range(len(merge_nb_updates))],
          xticklabels=country_codes)
@@ -60,10 +62,11 @@ plt.close(fig)
 fig, ax = plt.subplots()
 ax.violinplot(merge_update_ratio, showmedians=True)
 ax.grid(True)
-plt.ylabel('Number of updates per prefix')
+plt.ylabel('log10(Number of updates per prefix)')
 xtickNames = plt.setp(ax, xticklabels=np.repeat(country_codes, 2))
 plt.setp(ax, xticks=[y+1 for y in range(len(merge_update_ratio))],
          xticklabels=country_codes)
 fig.savefig(figure_path+'update-ratio-menog-'+timestamp+'.png')
 plt.close(fig)
+
 
