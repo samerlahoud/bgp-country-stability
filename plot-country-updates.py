@@ -50,7 +50,7 @@ for output_file in sorted(glob.glob(os.path.join(output_path, '*.txt'))):
 fig, ax = plt.subplots()
 ax.violinplot(merge_nb_updates, showmedians=True)
 ax.grid(True)
-plt.ylabel('log10(Number of updates)')
+plt.ylabel('Number of updates')
 xtickNames = plt.setp(ax, xticklabels=np.repeat(country_codes, 2))
 plt.setp(ax, xticks=[y+1 for y in range(len(merge_nb_updates))],
          xticklabels=country_codes)
@@ -60,7 +60,7 @@ plt.close(fig)
 fig, ax = plt.subplots()
 ax.violinplot(merge_update_ratio, showmedians=True)
 ax.grid(True)
-plt.ylabel('log10(Number of updates per prefix)')
+plt.ylabel('Number of updates per prefix')
 xtickNames = plt.setp(ax, xticklabels=np.repeat(country_codes, 2))
 plt.setp(ax, xticks=[y+1 for y in range(len(merge_update_ratio))],
          xticklabels=country_codes)
