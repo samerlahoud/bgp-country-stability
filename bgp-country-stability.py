@@ -6,8 +6,12 @@ from time import gmtime, strftime
 from datetime import date, timedelta
 
 api_url_base = 'https://stat.ripe.net/data/'
-starttime = date.today()+timedelta(weeks=-2)
+
+starttime = date.today()+timedelta(weeks=-4)
+endtime = date.today()+timedelta(weeks=-2)
+
 starttime = starttime.strftime("%Y-%m-%dT12:00")
+endtime = endtime.strftime("%Y-%m-%dT12:00")
 
 def get_country_asn(country_code):
 
@@ -24,7 +28,7 @@ def get_country_asn(country_code):
 
 def get_asn_update(asn):
 
-    api_url = '{}bgp-update-activity/data.json?resource={}&starttime={}'.format(api_url_base, asn, starttime)
+    api_url = '{}bgp-update-activity/data.json?resource={}&starttime={}&endtime={}'.format(api_url_base, asn, starttime, endtime)
 
     response = requests.get(api_url)
 
@@ -39,7 +43,7 @@ def get_asn_update(asn):
 
 def get_asn_prefix(asn):
 
-    api_url = '{}announced-prefixes/data.json?resource={}&starttime={}'.format(api_url_base, asn, starttime)
+    api_url = '{}announced-prefixes/data.json?resource={}&starttime={}&endtime={}'.format(api_url_base, asn, starttime, endtime)
 
     response = requests.get(api_url)
 
