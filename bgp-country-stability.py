@@ -7,11 +7,11 @@ from datetime import date, timedelta
 
 api_url_base = 'https://stat.ripe.net/data/'
 
-starttime = date.today()+timedelta(weeks=-4)
-endtime = date.today()+timedelta(weeks=-2)
+start = date.today()+timedelta(weeks=-2)
+end = date.today()+timedelta(weeks=0)
 
-starttime = starttime.strftime("%Y-%m-%dT12:00")
-endtime = endtime.strftime("%Y-%m-%dT12:00")
+starttime = start.strftime("%Y-%m-%dT12:00")
+endtime = end.strftime("%Y-%m-%dT12:00")
 
 def get_country_asn(country_code):
 
@@ -65,7 +65,7 @@ def get_country_update(country_code):
 if __name__ == "__main__":
 
     country_update = get_country_update(str(sys.argv[1]))
-    outfile_path = './output/bgp-stability-{}-{}.txt'.format(str(sys.argv[1]),strftime("%Y-%m-%d", gmtime()))
+    outfile_path = './output/bgp-stability-{}-{}-{}.txt'.format(str(sys.argv[1]),start.strftime("%Y%m%d"),end.strftime("%Y%m%d"))
     outfile = open(outfile_path, mode='w', encoding='utf-8')
     for asn in country_update:
         asn_prefix = get_asn_prefix(asn)
